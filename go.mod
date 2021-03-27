@@ -8,4 +8,5 @@ require (
 	github.com/leaanthony/mewn v0.10.7
 	github.com/shirou/gopsutil v3.20.12+incompatible
 	github.com/wailsapp/wails v1.11.0
+	go.mongodb.org/mongo-driver v1.4.6
 )

@@ -1,6 +1,7 @@
 package sys
 
 import (
+	"context"
 	"fmt"
 	"math"
 	"os"
@@ -39,14 +40,14 @@ func (s *Stats) WailsInit(runtime *wails.Runtime) error {
 // GetCPUUsage .
 func (s *Stats) GetCPUUsage() *CPUUsage {
 	percent, err := cpu.Percent(1*time.Second, false)
-	initialStat, err1 := os.Stat("K://WordPressLogAnalysisTool//local_agent//backend//Testings//cd-cpustats//test.txt")
+	initialStat, err1 := os.Stat("K://WordPressLogAnalysisTool//LocalAgent//localAgent//test.txt")
 
 	if err1 != nil {
 		s.log.Errorf("undefined filepath!: %s", err.Error())
 		s.log.Errorf("Initial file stat: %s", initialStat.ModTime())
 	}
 	for {
-		stat, err := os.Stat("K://WordPressLogAnalysisTool//local_agent//backend//Testings//cd-cpustats//test.txt")
+		stat, err := os.Stat("K://WordPressLogAnalysisTool//LocalAgent//localAgent//test.txt")
 		//s.log.Errorf("Updated file stat: %s", stat.ModTime())
 		if err != nil {
 
@@ -55,6 +56,23 @@ func (s *Stats) GetCPUUsage() *CPUUsage {
 
 		if stat.Size() != initialStat.Size() || stat.ModTime() != initialStat.ModTime() {
 			s.log.Errorf("Updated file stat: %s", stat.ModTime())
+
+			collection, err := GetDBCollection("docs")
+			type person struct {
+				name string
+				age  int
+			}
+			joe := person{
+				name: "Doe, John",
+				age:  32,
+			}
+			if err != nil {
+
+				s.log.Errorf("unable to get cpu stats: %s", err.Error())
+				return nil
+			}
+
+			_, err = collection.InsertOne(context.TODO(), joe)
 			break
 		}
 	}

@@ -14,5 +14,6 @@ export default {
   components: {
     CPUUsage
   }
+  
 };
 </script>
